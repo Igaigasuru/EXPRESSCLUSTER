@@ -5,7 +5,7 @@
 RHEL 7.2 (kernel: 3.10.0-327.el7.x86_64)
 PostgreSQL 10-10.1
 EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
-
+```
 ## System setup
 
 <<DB Server>>
