@@ -13,19 +13,19 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 		1. Register licenses  
 	1. On Primary server  
 		1. Create a cluster and a failover group  
-			- Group:
-				group  
+			- Group:  
+				- group  
 			- Resource:  
-				fip  
-				sd or md  
+				- fip  
+				- sd or md  
 		1. Start group on Primary server  
 1. PostgreSQL installation
 	1. On both Servers
 		1. Install PostgreSQL on both Servers  
-			postgresql10-10.1-1PGDG.rhel7.x86_64  
-			postgresql10-contrib-10.1-1PGDG.rhel7.x86_64  
-			postgresql10-libs-10.1-1PGDG.rhel7.x86_64  
-			postgresql10-server-10.1-1PGDG.rhel7.x86_64  
+			- postgresql10-10.1-1PGDG.rhel7.x86_64  
+			- postgresql10-contrib-10.1-1PGDG.rhel7.x86_64  
+			- postgresql10-libs-10.1-1PGDG.rhel7.x86_64  
+			- postgresql10-server-10.1-1PGDG.rhel7.x86_64  
 		1. Confirm PosgreSQL user name and ID on both Servers are the same
 			```bat
 			# id postgres
@@ -47,13 +47,13 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			$ /usr/pgsql-10/bin/initdb -D /mnt/sdb2/pgsql/data -E UTF8 --no-locale -W
 			```
 		1. Edit database config file as you like.
-			- /mnt/sdb2/pgsql/data/pg_hba.conf
+			- /mnt/sdb2/pgsql/data/pg_hba.conf  
 				For example, allow connection through all IP interfaces with port 5432 (default port).
 				```bat
 				listen_address = '*'
 				port = 5432
 				```
-			- /mnt/sdb2/pgsql/data/pg_hba.conf
+			- /mnt/sdb2/pgsql/data/pg_hba.conf  
 				For example, allow connection from machines which belong to 192.168.10.0/24.
 				```bat
 				host all all 192.168.10.0/24 md5
