@@ -7,24 +7,21 @@ PostgreSQL 10-10.1
 EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 ```
 ## System setup
-
-<<DB Server>>
-
 1. Basic cluster setup
-	1. On Primary and Secondary servers  
+	1. On both Primary and Secondary Servers  
 		1. Install ECX  
 		1. Register licenses  
 	1. On Primary server  
 		1. Create a cluster and a failover group  
 			- Group:
-				- group  
+				group  
 			- Resource:  
-				- fip  
+				fip  
 				sd or md  
 		1. Start group on Primary server  
 1. PostgreSQL installation
 	1. On both Servers
-		1. Install PostgreSQL on both Servers
+		1. Install PostgreSQL on both Servers  
 			postgresql10-10.1-1PGDG.rhel7.x86_64  
 			postgresql10-contrib-10.1-1PGDG.rhel7.x86_64  
 			postgresql10-libs-10.1-1PGDG.rhel7.x86_64  
