@@ -4,7 +4,7 @@
 HA DBMS Demo Toolkit (PostgreSQL) is demo tool for PostgreSQL DB Cluster.
 Please refer the below for how to use it.
 
-##System configuration
+## System configuration
 
 
 ## System environment
