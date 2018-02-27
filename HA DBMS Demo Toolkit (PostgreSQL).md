@@ -110,7 +110,7 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		db1-# \q
 		```
 1. Use Demo Tool
-	1. Download [Demo tool](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/PostGreClusterDemo.php "Title") and store it under "C:\Apache24%\htdocs\".
+	1. Download [Demo tool](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/PostgreClusterDemo.php "Title") and store it under "C:\Apache24%\htdocs\".
 		```bat
 		C:\Apache24%\htdocs\Demo\ClusterDemo.php
 		```
