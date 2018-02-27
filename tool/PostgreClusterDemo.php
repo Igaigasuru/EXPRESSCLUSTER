@@ -34,8 +34,8 @@
 //  $itemname: Countup target name which should be the same as a name in db table (e.g. "US-dollar")
 //  $displayname: Display name of the countup target (e.g. "$")
 // -----------------------------------------------
-  $dbname = "test-db";
-  $dbtable = "testtable";
+  $dbname = "db1";
+  $dbtable = "demotable";
   $dbuser = "postgres";
   $dbpass = "postgres";
   $dbport = "5432";
