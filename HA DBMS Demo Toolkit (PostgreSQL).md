@@ -50,7 +50,7 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		http://localhost/
 		```
 1. Change php setteings to enable demo tool.
-	1. Edit the "php.ini" as the below:  
+	1. Edit the "C:\php\php.ini" as the below:  
 		```bat  
 		mbstring.internal_encoding = utf-8
 		mbstring.http_output = utf-8
@@ -63,7 +63,7 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		display_errors = Off
 		```
 1. Change Apache setteings to use enable php on Apache Web server.
-	1. Edit the "httpd.conf" as the below:  
+	1. Edit the "C:\Apache24\conf\httpd.conf" as the below:  
 		```bat  
 		Listen 127.0.0.1:80
 		
@@ -76,16 +76,16 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		    DirectoryIndex index.html index.php
 		</IfModule>
 		```
-	1. Add the following at the end of "httpd.conf":
+	1. Add the following at the end of "C:\Apache24\conf\httpd.conf":
 		```bat
 		LoadModule php7_module "c:/php/php7apache2_4.dll"
 		AddHandler application/x-httpd-php .php
 		
 		PHPIniDir "C:/php"
 		```
-	1. Check the syntax error in "httpd.conf" and with the following command. (By restarting from CLI, you can confirm syntax error.)
+	1. Restart Apache service to apply the new setting. (By restarting from CLI, you can confirm syntax error in httpd.conf.)
 		```bat
-		httpd.exe -t
+		httpd.exe -k restart
 		```
 	1. Create new php file under "<Apache installation path>\Apache24\htdocs".
 		e.g.) C:\Apache24\htdocs\phpinfo.php
@@ -112,7 +112,17 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 1. Use Demo Tool
 	1. Download [Demo tool](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/PostgreClusterDemo.php "Title") and store it under "C:\Apache24%\htdocs\".
 		```bat
-		C:\Apache24%\htdocs\Demo\ClusterDemo.php
+		C:\Apache24%\htdocs\Demo\PostgreClusterDemo.php
+		```
+	1. Change parameters in "PostgreClusterDemo.php".
+		```bat
+		$dbname = "db1";
+		$dbtable = "demotable";
+		$dbuser = "postgres";
+		$dbpass = "postgres";
+		$dbport = "5432";
+		$itemname = "US-dollar";
+		$displayname = "$";
 		```
 	1. Start FireFox brouwser and access to the URL.
 		```bat
