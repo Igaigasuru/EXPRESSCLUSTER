@@ -42,14 +42,18 @@
   $itemname = "US-dollar";
   $displayname = "$";
 
+// ---------- Please don't change the following parameters ----------
   $logged_in = false;
   $conn = null;
   $trn_repeat = false;
+// -----------------------------------------------
+
 
   // Omajinai for flash string
   echo str_pad("", 4096)."<br/>\n";
   ob_end_flush();
   ob_start('mb_output_handler');
+
 
 // [Start] button is clicked
   if (isset($_POST["start"])) {
@@ -58,142 +62,104 @@
 
     //Connect to DB
     $conn = pg_connect($constr);
-
     if($conn != true){
       $str = "<b><font color=\\\"#FF0000\\\">Error!</font></b> Cannot connect to DB: ".$dbname;
-      $str = "<script type =\"text/javascript\">document.getElementById(\"dbstatus\").innerHTML=\"".$str."\";</script>";
-      print ($str);
-      ob_flush();
-      flush();
+      display_data($str, "dbstatus", 0);
       exit;
     }
-    
+
     $trn_repeat = true;
     $trn_result = true;
+
     while ($trn_repeat){
       if($trn_result){
         //Get DB table data and store it to $num
         $result = pg_query($conn, "SELECT number FROM testtable WHERE name='".$itemname."'");
         $num = pg_fetch_result($result, 0, 0);
-    
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbstatus\").innerHTML=\"<img src=\\\"pic/coin.png\\\">".$itemname.": ".$num.$displayname."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
-        sleep(1);
+        $str = $itemname.": ".$num.$displayname;
+        display_data($str, "dbstatus", 1);
       }
       $num_tmp=$num;
 
       //Start Transaction
       if($trn_result){
         $str_tmp = "<b>Transaction Start</b><br><br>";
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
+        display_data($str_tmp, "dbtransaction", 0);
       }
-
       else{
         $str_tmp = "<b><font color=\\\"#FF367F\\\">Retry from ".$num.$displayname."</font></b><br><br>";
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
+        display_data($str_tmp, "dbtransaction", 0);
     
         while(true){
           $conn = pg_connect($constr);
-
           if($conn){
             break;
           }
           sleep(1);
         }
       }
-
       $result = pg_query($conn, "BEGIN");
-
       for($count = 0; $count < 5; $count++) {
         $result = pg_query($conn, "UPDATE ".$dbtable." set number=number+10 where name='".$itemname."'");
         $trn_result = $result;
-
         if($trn_result != true){
           $str_tmp = $str_tmp."Add 10".$displayname." -> <b><font color=\\\"#FF0000\\\">Error!</font></b> Transaction failed.<br>";
-          $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-          print ($str);
-          ob_flush();
-          flush();
-          sleep(1);
-
+          display_data($str_tmp, "dbtransaction", 1);
           break;
         }
-
         $num_tmp+=10;
-
         $str_tmp = $str_tmp."  Add 10".$displayname." -> ".$num_tmp.$displayname."<br>";
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
-        sleep(1);
+        display_data($str_tmp, "dbtransaction", 1);
       }
-
       if($trn_result == true){
         $result = pg_query($conn, "COMMIT");
         $trn_result = $result;
       }
-
       if($trn_result != true){
         pg_query($conn, "ROLLBACK");
-
         $str_tmp = $str_tmp."<br><b><font color=\\\"#FF367F\\\">Error! Rollback: ".$num.$displayname."</font></b>";
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
-        sleep(1);
-
+        display_data($str_tmp, "dbtransaction", 1);
         pg_close($conn);
         $conn = pg_connect($constr);
       }
-
       else{
         $str_tmp = $str_tmp."<br><b><font color=\\\"#136FFF\\\">Commit: ".$num_tmp.$displayname."</font></b>";
-        $str = "<script type =\"text/javascript\">document.getElementById(\"dbtransaction\").innerHTML=\"".$str_tmp."\";</script>";
-        print ($str);
-        ob_flush();
-        flush();
-        sleep(1);
+        display_data($str_tmp, "dbtransaction", 1);
       }
     }
-
-// End of [Start] button
+    
+    // End of [Start] button
   }
 
 // [Stop] button is clicked
   if (isset($_POST["stop"])) {
-
     //Disconnect DB
     $result = true;
     if ($conn != null)
       $result = pg_close($conn);
-
     if ($result == true){
       $str = "Disconnected DB: ".$dbname;
-      $str = "<script type =\"text/javascript\">document.getElementById(\"dbstatus\").innerHTML=\"".$str."\";</script>";
+      display_data($str, "dbstatus", 1);
+
       $trn_repeat = false;
     }
     else{    
       $str = "Error! Cannot disconnect DB: ".$dbname;
-      $str = "<script type =\"text/javascript\">document.getElementById(\"dbstatus\").innerHTML=\"".$str."\";</script>";
+      display_data($str, "dbstatus", 1);
     }
 
+  // End of [Stop] button is clicked
+  }
+
+//function to displat data
+function display_data($str, $tagid, $sleeptime)
+{
+    $str = "<script type =\"text/javascript\">document.getElementById(\"".$tagid."\").innerHTML=\"".$str."\";</script>";
     print ($str);
     ob_flush();
     flush();
-    sleep(1);
-
-// End of [Stop] button is clicked
-  }
+    sleep($sleeptime);
+}
 
 ?>
   </body>
