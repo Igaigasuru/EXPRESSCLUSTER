@@ -30,7 +30,7 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		e.g.) C:\php
 	1. Add the folder path ";C\php" to Environment Variables, "Path" in System variables.
 	1. Copy and rename "C:\php\php.ini-production" file to "C:\php\php.ini".
-	1. If you store php folder othert than under C:, please replace all "C:\" (default path) in "php.ini" file to actual path.
+	1. If you store php folder othert than under C:, replace all "C:\" (default path) in "php.ini" file to actual path.
 	1. Try php command on command promptand and confirm it works.
 		```bat
 		C:\Users\Administrator>php -v
@@ -45,12 +45,11 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		C:\Apache24\bin>httpd.exe -k install
 		```
 	1. Execute "C:\Apache24\bin\ApacheMonitor.exe" and start Apache service.
-	1. Start FireFox browser and access to "http://localhost/" and confirm it works.
-
-1. Change php and Apache setting to connect Postgre Server.
-
-
-1. Change Apache setting to use PHP.
+	1. Start FireFox browser and access the following URL and confirm Apache Web server works.
+		```bat
+		http://localhost/
+		```
+1. Change php setteings to enable demo tool.
 	1. Edit the "php.ini" as the below:  
 		```bat  
 		mbstring.internal_encoding = utf-8
@@ -63,6 +62,7 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		
 		display_errors = Off
 		```
+1. Change Apache setteings to use enable php on Apache Web server.
 	1. Edit the "httpd.conf" as the below:  
 		```bat  
 		Listen 127.0.0.1:80
@@ -83,20 +83,40 @@ Please refer: [How to setup PostgreSQL DB Cluster](https://github.com/Igaigasuru
 		
 		PHPIniDir "C:/php"
 		```
-	1. Restart Apache service to apply the settings.
+	1. Check the syntax error in "httpd.conf" and with the following command. (By restarting from CLI, you can confirm syntax error.)
 		```bat
-		httpd.exe -k restart
+		httpd.exe -t
 		```
-1. Store Demo tool.
-	1. Download fomr [here](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/PostGreClusterDemo.php)
-	1. Store the files under " C:\Apache24%\htdocs\".
+	1. Create new php file under "<Apache installation path>\Apache24\htdocs".
+		e.g.) C:\Apache24\htdocs\phpinfo.php
+		And write in the file as the following.
+		```bat
+		<?php phpinfo(); ?>
+		```
+	1. Start FireFox browser and access the following URL and confirm php information is displayed.
+		```bat
+		http://localhost/phpinfo.php
+		```
+1. Create DB table for demo
+	1. On Active Postgre SQL Server, create db table which has 2 columns named "name(varchar)" and "number(int)" 
+		```bat
+		# su - postgres
+		$ /usr/pgsql-10/bin/psql -U postgres -d db1
+		db1-# CREATE TABLE demotable(
+		db1-# name varchar(20) NULL,
+		db1-# number int NULL
+		db1-# );
+		db1-# INSERT into demotable values ('Kurara', 0);
+		db1-# \q
+		```
+1. Use Demo Tool
+	1. Download [Demo tool](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/PostGreClusterDemo.php "Title") and store it under "C:\Apache24%\htdocs\".
 		```bat
 		C:\Apache24%\htdocs\Demo\ClusterDemo.php
 		```
-1. Run the tool.
-	1. Open the tool with a browser.
+	1. Start FireFox brouwser and access to the URL.
 		```bat
 		http://localhost/Demo/ClusterDemo.php
 		```
-	1. Set fip of PostgreSQL Cluster
+	1. Set fip of PostgreSQL Server Cluster.
 	1. Click "Start".
