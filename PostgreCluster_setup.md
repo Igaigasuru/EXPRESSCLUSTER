@@ -19,8 +19,8 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			- Resource:  
 				- fip  
 				- md (e.g. Data Partition: "/dev/sdb2", Mount Point: "/mnt/sdb2")  
-		1. Start group on Primary server  
-
+		1. Start group on Primary server  
+  
 1. PostgreSQL installation
 	1. On both Servers
 		1. Install PostgreSQL on both Servers  
@@ -148,4 +148,4 @@ exit 0
 ```
 
 ## Reference
-[HA DBMS Demo Toolkit (PostgreSQL).md](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/HA%20DBMS%20Demo%20Toolkit%20(PostgreSQL).md)
+[HA DBMS Demo Toolkit (PostgreSQL)](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/HA%20DBMS%20Demo%20Toolkit%20(PostgreSQL).md)
