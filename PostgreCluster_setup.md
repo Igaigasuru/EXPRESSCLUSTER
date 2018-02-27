@@ -146,3 +146,6 @@ su - ${SUUSER} -c "${PGINST}/bin/pg_ctl stop -D ${PGDATA} -m fast"
 echo "EXIT"
 exit 0
 ```
+
+## Reference
+[HA DBMS Demo Toolkit (PostgreSQL).md](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/HA%20DBMS%20Demo%20Toolkit%20(PostgreSQL).md)
