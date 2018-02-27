@@ -6,6 +6,7 @@ RHEL 7.2 (kernel: 3.10.0-327.el7.x86_64)
 PostgreSQL 10-10.1
 EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 ```
+
 ## System setup
 1. Basic cluster setup
 	1. On both Primary and Secondary Servers  
@@ -17,15 +18,18 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 				- group  
 			- Resource:  
 				- fip  
-				- sd or md  
+				- md (e.g. Data Partition: "/dev/sdb2", Mount Point: "/mnt/sdb2")  
 		1. Start group on Primary server  
+
 1. PostgreSQL installation
 	1. On both Servers
 		1. Install PostgreSQL on both Servers  
+			```bat
 			- postgresql10-10.1-1PGDG.rhel7.x86_64  
 			- postgresql10-contrib-10.1-1PGDG.rhel7.x86_64  
 			- postgresql10-libs-10.1-1PGDG.rhel7.x86_64  
 			- postgresql10-server-10.1-1PGDG.rhel7.x86_64  
+			```
 		1. Confirm PosgreSQL user name and ID on both Servers are the same
 			```bat
 			# id postgres
@@ -35,7 +39,7 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			# useradd -u 26 postgres
 			```
 	1. On Primary Server (active)
-		1. Create directory to store database under sd or md Mount Point (e.g. "/mnt/sdb2") and change its owner to postgres user.
+		1. Create directory to store database under md Mount Point and change its owner to postgres user.
 			```bat
 			# mkdir -p /mnt/sdb2/pgsql/data
 			# chown -R postgres:postgres /mnt/sdb2/pgsql/data
@@ -46,15 +50,15 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			# su - postgres
 			$ /usr/pgsql-10/bin/initdb -D /mnt/sdb2/pgsql/data -E UTF8 --no-locale -W
 			```
-		1. Edit database config file as you like.
+		1. Edit database config file as you like. Here is a sample settings.
 			- /mnt/sdb2/pgsql/data/pg_hba.conf  
-				For example, allow connection through all IP interfaces with port 5432 (default port).
+				Set all IPs on the Postgre Server to listen with 5432 port (default port).
 				```bat
 				listen_address = '*'
 				port = 5432
 				```
 			- /mnt/sdb2/pgsql/data/pg_hba.conf  
-				For example, allow connection from machines which belong to 192.168.10.0/24.
+				Set to allow connection from client machines which belong to 192.168.10.0/24 segment.
 				```bat
 				host all all 192.168.10.0/24 md5
 				```
@@ -80,6 +84,7 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			```bat
 			$ /usr/local/pgsql/bin/pg_ctl stop -D /mnt/sdb2/pgsql/data -m fast
 			```
+
 1. PostgreSQL cluster setup
 	1. Add resources to group
 		- exec_postgres
@@ -117,13 +122,7 @@ then
         rm -f /tmp/.s.PGSQL.${PGPORT}
 fi
 
-if [ "$CLP_DISK" = "SUCCESS" ]
-then
-        su - ${SUUSER} -c "${PGINST}/bin/pg_ctl start -D ${PGDATA} -l /dev/null -o '-i -p ${PGPORT}'"
-else
-        echo "ERROR_DISK from START"
-        exit 1
-fi
+su - ${SUUSER} -c "${PGINST}/bin/pg_ctl start -D ${PGDATA} -l /dev/null -o '-i -p ${PGPORT}'"
 
 echo "EXIT"
 exit 0
@@ -142,13 +141,8 @@ PGINST="/usr/pgsql-10" # PG Install directory
 PGDATA="/mnt/md1/pgsql/data" # Database directory
 PGPORT="5432" # Database Port number
 
-if [ "$CLP_DISK" = "SUCCESS" ]
-then
-        su - ${SUUSER} -c "${PGINST}/bin/pg_ctl stop -D ${PGDATA} -m fast"
-else
-                echo "ERROR_DISK from START"
-                exit 1
-fi
+su - ${SUUSER} -c "${PGINST}/bin/pg_ctl stop -D ${PGDATA} -m fast"
+
 echo "EXIT"
 exit 0
 ```
