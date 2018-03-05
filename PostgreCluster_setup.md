@@ -51,10 +51,10 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
 			$ /usr/pgsql-10/bin/initdb -D /mnt/sdb2/pgsql/data -E UTF8 --no-locale -W
 			```
 		1. Edit database config file as you like. Here is a sample settings.
-			- /mnt/sdb2/pgsql/data/pg_hba.conf  
+			- /mnt/sdb2/pgsql/data/postgresql.conf  
 				Set all IPs on the Postgre Server to listen with 5432 port (default port).
 				```bat
-				listen_address = '*'
+				listen_addresses = '*'
 				port = 5432
 				```
 			- /mnt/sdb2/pgsql/data/pg_hba.conf  
