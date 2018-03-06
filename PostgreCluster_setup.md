@@ -23,6 +23,10 @@ EXPRESSCLUSTER X 3.3 for Linux (3.3.5-1)
   
 1. PostgreSQL installation
 	1. On both Servers
+		1. Confirm SE linux is disabled
+			```bat
+			# sestatus
+			```
 		1. Install PostgreSQL on both Servers  
 			```bat
 			- postgresql10-10.1-1PGDG.rhel7.x86_64  
