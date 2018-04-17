@@ -256,3 +256,9 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 - EXPRESSCLUSTER X 3.3 for Linux Reference Guide
 
 ## Appendix
+
+★Script
+
+Refarence:
+https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/monitor-availability-groups-transact-sql#AvGroups
+https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-availability-group-transact-sql?view=sql-server-2017
