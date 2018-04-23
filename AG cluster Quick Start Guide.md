@@ -36,12 +36,12 @@ The guide assumes its readers to have EXPRESSCLUSTER X basic knowledge and setup
 		- fip:  
 			Used to connect AG database from Client.
 		- exec:  
-			Used to manage AG. Please refer "Appendix" for sample scripts.
+			Used to manage AG. Please refer "Appendix" for start/stop scripts.
 	- Monitor Resources
 		- genw-ActiveNode:  
-			Used to monitor Active Server AG role. Please refer "Appendix" for sample scripts.
+			Used to monitor Active Server AG role. Please refer "Appendix" for monitoring scripts.
 		- genw-SatndbyNode:  
-			Used to monitor Standby Server AG role. Please refer "Appendix" for sample scripts.
+			Used to monitor Standby Server AG role. Please refer "Appendix" for monitoring scripts.
 		- psw:  
 			Used to moitor SQL Server service status.
 
@@ -245,10 +245,21 @@ https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-availability-group-c
 ### Install EXPRESSCLUSTER and configure AG cluster
 #### On all servers
 1. Install EXPRESSCLUSTER and register its license.  
+2. Crete .sql scripts. Please refer "Appendix" for the sqripts.  
+	e.g.) Under "/opt/nec/clusterpro/scripts/failover/sqlcommand/"  
+  	- agFailover.sql  
+	- is_failover_ready.sql  
+	- role.sql  
+	- setSecondary.sql  
+3. Add execution permission on all .sql scripts.
+	```bat
+	# chown 777 /opt/nec/clusterpro/scripts/failover/sqlcommand/*
+	```
+
 #### On a primary server
-2. Start WebManager, create a cluster and apply it.  
+4. Start WebManager, create a cluster and apply it.  
   Regarding cluster configuration, please refer "Cluster Configuration" in the above.  
-3. Activate failover group on the primary server.  
+5. Activate failover group on the primary server.  
 
 Reference:
 https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
@@ -259,6 +270,32 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 
 ★Script
 
+- agFailover.sql  
+	```bat
+	ALTER AVAILABILITY GROUP ag2 FAILOVER;
+	go
+	```
+- is_failover_ready.sql  
+	```bat
+	select is_failover_ready
+	from sys.dm_hadr_database_replica_cluster_states
+	where replica_id in (
+	  select replica_id
+	  from sys.dm_hadr_availability_replica_states where is_local=1
+	);
+	go
+	```
+- role.sql  
+	```bat
+	select role_desc from sys.dm_hadr_availability_replica_states where is_local=1;
+	go
+	```
+- setSecondary.sql  
+	```bat
+	ALTER AVAILABILITY GROUP ag2 SET (ROLE = SECONDARY);
+	go
+	```
+	
 Refarence:
 https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/monitor-availability-groups-transact-sql#AvGroups
 https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-availability-group-transact-sql?view=sql-server-2017
