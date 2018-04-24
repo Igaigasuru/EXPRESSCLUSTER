@@ -29,15 +29,15 @@ The guide assumes its readers to have EXPRESSCLUSTER X basic knowledge and setup
 ### Cluster Configuration
 - Cluster Properties
 	- NP Resolution:
-		- Add 1 Ping NP  
-			Action at NP occurrence: Stop the cluster service and shutdown OS
-- Failover Group★
+		- Ping NP:  
+			Used to avoid NP.
+- Failover Group
 	- Resurces  
 		- fip:  
 			Used to connect AG database from Client.
 		- exec:  
 			Used to manage AG. Please refer "Appendix" for start/stop scripts.
-	- Monitor Resources
+- Monitor Resources
 		- genw-ActiveNode:  
 			Used to monitor Active Server AG role. Please refer "Appendix" for monitoring scripts.
 		- genw-SatndbyNode:  
@@ -50,9 +50,9 @@ The guide assumes its readers to have EXPRESSCLUSTER X basic knowledge and setup
 - AG replica on all servers should be operated by EXPRESSCLUSTER.
 
 ### Behavior
-- When failover group is activated on a server, role of the server replica becomes PRIMARY.  
-- When failover group is de-activated on a server, role of the server replica becomes SECONDARY.  
-- When failover group is failed over, role of the source server replica becomes SECONDARY and role of the target server replica becomes PRIMARY.  
+- When failover group is activated on a server, AG role of the server replica becomes PRIMARY.  
+- When failover group is de-activated on a server, AG role of the server replica becomes SECONDARY.  
+- When failover group is failed over, AG role of the source server replica becomes SECONDARY and role of the target server replica becomes PRIMARY.  
 
 ### Monitoring
 - Active node role monitoring:  
@@ -61,6 +61,8 @@ The guide assumes its readers to have EXPRESSCLUSTER X basic knowledge and setup
 	If replica role on Standby server role is promoted from SECONDARY to PRIMARY by other than EXPRESSCLUSTER operations, it is detected as an error and EXPRESSCLUSTER will demote it to SECONDARY.
 - Active node service monitoring:  
 	If mssql-server service on Active server is stopped by other than EXPRESSCLUSTER operations, it is detected as an error and failover will occur.
+- Standby node service monitoring:  
+	If mssql-server service on Standby server is stopped by other than EXPRESSCLUSTER operations, it is detected as an error but no action will occur.
 
 ## System Setup
 ### Download and install MSSQL Server
@@ -258,7 +260,7 @@ https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-availability-group-c
 
 #### On a primary server
 4. Start WebManager, create a cluster and apply it.  
-  Regarding cluster configuration, please refer "Cluster Configuration" in the above.  
+  Regarding cluster configuration, please refer "Cluster Settings" in the above.  
 5. Activate failover group on the primary server.  
 
 Reference:
@@ -266,10 +268,47 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 - EXPRESSCLUSTER X 3.3 for Linux Installation and Configuration Guide
 - EXPRESSCLUSTER X 3.3 for Linux Reference Guide
 
+## Cluster Settings
+- Cluster Properties
+	- NP Resolution:
+		- Ping NP:  
+			- Action at NP occurrence: Stop the cluster service and shutdown OS
+- Failover Group
+	- Resurces  
+		- fip:  
+		- exec:  
+			- Dependency:  Set deeper depth than fip
+			- start.sh:  Please refer "Appendix"
+			- stop.sh: Please refer "Appendix"
+- Monitor Resources
+		- genw-ActiveNode:  
+			- Monitor Timing:  Active (Target Resource: exec)
+			- Choose servers that execute monitoring:  All Servers
+			- genw.sh:  Please refer "Appendix"
+			- Monitor Type:  Synchronous
+			- Normal Return Value:  0
+			- Recovery Action:  Execute failover to the recovery target
+			- Recovery Target:  failover group
+		- genw-SatndbyNode:  
+			- Monitor Timing:  Always
+			- Choose servers that execute monitoring:  All Servers
+			- genw.sh:  Please refer "Appendix"
+			- Monitor Type:  Synchronous
+			- Normal Return Value:  0
+			- Recovery Action:  Custom settings
+			- Recovery Target:  LocalServer
+			- Recovery Script Execution Count:  1
+			- Final Action:  Stop the cluster service and shutdown OS
+			- Script Settings:  Please refer "Appendix"
+		- psw:  
+			- Monitor Timing:  Always
+			- Choose servers that execute monitoring:  All Servers
+			- Process Name:  /opt/mssql/bin/sqlservr
+			- Recovery Action:  Execute failover to the recovery target
+			- Recovery Target:  failover group
+
+
 ## Appendix
-
-★Script
-
 - agFailover.sql  
 	```bat
 	ALTER AVAILABILITY GROUP ag2 FAILOVER;
@@ -295,7 +334,9 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 	ALTER AVAILABILITY GROUP ag2 SET (ROLE = SECONDARY);
 	go
 	```
-	
+- start.sh for exec resource
+
+
 Refarence:
 https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/monitor-availability-groups-transact-sql#AvGroups
 https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-availability-group-transact-sql?view=sql-server-2017
