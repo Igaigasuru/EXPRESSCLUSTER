@@ -152,7 +152,7 @@ https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-red-hat
 	```bat
 	# chown mssql:mssql /var/opt/mssql/data/dbm_certificate.*
 	```
-6. Create Certificate  
+6. Create Certificate.  
 	```bat
 	# sqlcms -U SA -P <SA password>
 	> CREATE MASTER KEY ENCRYPTION BY PASSWORD = '<Master_Key_Password>';
@@ -183,7 +183,7 @@ https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-red-hat
 	>exit
 	```
 #### On primary server
-8. Create Availability Group (ag)
+8. Create Availability Group (ag) with **"FAILOVER_MODE = MANUAL"**.
 	```bat
 	# sqlcms -U SA -P <SA password>
 	> CREATE AVAILABILITY GROUP <ag name>
@@ -214,11 +214,11 @@ https://docs.microsoft.com/en-us/sql/linux/quickstart-install-connect-red-hat
 	> exit
 	```
 #### On secondary servers
-9. Join secondary servers to the ag
+9. Join secondary servers to the ag.
 	```bat
 	# sqlcms -U SA -P <SA password>
-	> ALTER AVAILABILITY GROUP ag1 JOIN WITH (CLUSTER_TYPE = NONE);
-	> ALTER AVAILABILITY GROUP ag1 GRANT CREATE ANY DATABASE;
+	> ALTER AVAILABILITY GROUP <ag name> JOIN WITH (CLUSTER_TYPE = NONE);
+	> ALTER AVAILABILITY GROUP <ag name> GRANT CREATE ANY DATABASE;
 	> go
 	> exit
 	```
@@ -260,7 +260,7 @@ https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-availability-group-c
 
 #### On a primary server
 4. Start WebManager, create a cluster and apply it.  
-  Regarding cluster configuration, please refer "Cluster Settings" in the above.  
+  Regarding cluster configuration, please refer [Cluster Settings](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/AG%20cluster%20Quick%20Start%20Guide.md#cluster-settings).  
 5. Activate failover group on the primary server.  
 
 Reference:
