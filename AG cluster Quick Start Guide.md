@@ -32,16 +32,16 @@ The guide assumes its readers to have EXPRESSCLUSTER X basic knowledge and setup
 		- Ping NP:  
 			Used to avoid NP.
 - Failover Group
-	- Resurces  
+	- Resurces
 		- fip:  
 			Used to connect AG database from Client.
 		- exec:  
-			Used to manage AG. Please refer "Appendix" for start/stop scripts.
-- Monitor Resources
+			Used to manage AG.
+	- Monitor Resources
 		- genw-ActiveNode:  
-			Used to monitor Active Server AG role. Please refer "Appendix" for monitoring scripts.
+			Used to monitor Active Server AG role.
 		- genw-SatndbyNode:  
-			Used to monitor Standby Server AG role. Please refer "Appendix" for monitoring scripts.
+			Used to monitor Standby Server AG role.
 		- psw:  
 			Used to moitor SQL Server service status.
 
