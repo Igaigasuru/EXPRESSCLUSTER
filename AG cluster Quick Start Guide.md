@@ -271,36 +271,36 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 ## Cluster Settings
 - Cluster Properties
 	- NP Resolution:
-		- Ping NP:  
+		- Ping NP:
 			- Action at NP occurrence: Stop the cluster service and shutdown OS
 - Failover Group
-	- Resurces  
-		- fip:  
-		- exec:  
-			- Dependency:  Set deeper depth than fip  
-			- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/start.sh)  
-			- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/stop.sh)  
-- Monitor Resources
-		- genw-ActiveNode:  
+	- Resurces
+		- fip:
+		- exec:
+			- Dependency:  Set deeper depth than fip
+			- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/start.sh)
+			- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/stop.sh)
+	- Monitor Resources
+		- genw-ActiveNode:
 			- Monitor Timing:  Active (Target Resource: exec)
 			- Choose servers that execute monitoring:  All Servers
-			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Active%20Node%20monitor%20genw.sh)  
+			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Active%20Node%20monitor%20genw.sh)
 			- Monitor Type:  Synchronous
 			- Normal Return Value:  0
 			- Recovery Action:  Execute failover to the recovery target
 			- Recovery Target:  failover group
-		- genw-SatndbyNode:  
+		- genw-SatndbyNode:
 			- Monitor Timing:  Always
 			- Choose servers that execute monitoring:  All Servers
-			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20genw.sh)  
-			- Monitor Type:  Synchronous  
-			- Normal Return Value:  0  
-			- Recovery Action:  Custom settings  
-			- Recovery Target:  LocalServer  
-			- Recovery Script Execution Count:  1  
-			- Final Action:  Stop the cluster service and shutdown OS  
-			- Script Settings:  [preaction.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20preaction.sh)  
-		- psw:  
+			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20genw.sh)
+			- Monitor Type:  Synchronous
+			- Normal Return Value:  0
+			- Recovery Action:  Custom settings
+			- Recovery Target:  LocalServer
+			- Recovery Script Execution Count:  1
+			- Final Action:  Stop the cluster service and shutdown OS
+			- Script Settings:  [preaction.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20preaction.sh)
+		- psw:
 			- Monitor Timing:  Always
 			- Choose servers that execute monitoring:  All Servers
 			- Process Name:  /opt/mssql/bin/sqlservr
@@ -309,5 +309,5 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 
 
 Refarence:
-https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/monitor-availability-groups-transact-sql#AvGroups
-https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-availability-group-transact-sql?view=sql-server-2017
+- https://docs.microsoft.com/en-us/sql/database-engine/availability-groups/windows/monitor-availability-groups-transact-sql#AvGroups
+- https://docs.microsoft.com/en-us/sql/t-sql/statements/alter-availability-group-transact-sql?view=sql-server-2017
