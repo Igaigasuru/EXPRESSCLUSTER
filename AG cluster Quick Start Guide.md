@@ -247,12 +247,12 @@ https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-availability-group-c
 ### Install EXPRESSCLUSTER and configure AG cluster
 #### On all servers
 1. Install EXPRESSCLUSTER and register its license.  
-2. Crete .sql scripts. Please refer "Appendix" for the sqripts.  
+2. Crete .sql scripts.  
 	e.g.) Under "/opt/nec/clusterpro/scripts/failover/sqlcommand/"  
-  	- agFailover.sql  
-	- is_failover_ready.sql  
-	- role.sql  
-	- setSecondary.sql  
+  	- [agFailover.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/agFailover.sql)  
+	- [is_failover_ready.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/is_failover_ready.sql)  
+	- [role.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/role.sql)  
+	- [setSecondary.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/setSecondary.sql)  
 3. Add execution permission on all .sql scripts.
 	```bat
 	# chown 777 /opt/nec/clusterpro/scripts/failover/sqlcommand/*
@@ -277,14 +277,14 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 	- Resurces  
 		- fip:  
 		- exec:  
-			- Dependency:  Set deeper depth than fip
-			- start.sh:  Please refer "Appendix"
-			- stop.sh: Please refer "Appendix"
+			- Dependency:  Set deeper depth than fip  
+			- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/start.sh)  
+			- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/stop.sh)  
 - Monitor Resources
 		- genw-ActiveNode:  
 			- Monitor Timing:  Active (Target Resource: exec)
 			- Choose servers that execute monitoring:  All Servers
-			- genw.sh:  Please refer "Appendix"
+			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Active%20Node%20monitor%20genw.sh)  
 			- Monitor Type:  Synchronous
 			- Normal Return Value:  0
 			- Recovery Action:  Execute failover to the recovery target
@@ -292,49 +292,20 @@ https://www.nec.com/en/global/prod/expresscluster/en/support/manuals.html
 		- genw-SatndbyNode:  
 			- Monitor Timing:  Always
 			- Choose servers that execute monitoring:  All Servers
-			- genw.sh:  Please refer "Appendix"
-			- Monitor Type:  Synchronous
-			- Normal Return Value:  0
-			- Recovery Action:  Custom settings
-			- Recovery Target:  LocalServer
-			- Recovery Script Execution Count:  1
-			- Final Action:  Stop the cluster service and shutdown OS
-			- Script Settings:  Please refer "Appendix"
+			- [genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20genw.sh)  
+			- Monitor Type:  Synchronous  
+			- Normal Return Value:  0  
+			- Recovery Action:  Custom settings  
+			- Recovery Target:  LocalServer  
+			- Recovery Script Execution Count:  1  
+			- Final Action:  Stop the cluster service and shutdown OS  
+			- Script Settings:  [preaction.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/Standby%20Node%20monitor%20preaction.sh)  
 		- psw:  
 			- Monitor Timing:  Always
 			- Choose servers that execute monitoring:  All Servers
 			- Process Name:  /opt/mssql/bin/sqlservr
 			- Recovery Action:  Execute failover to the recovery target
 			- Recovery Target:  failover group
-
-
-## Appendix
-- agFailover.sql  
-	```bat
-	ALTER AVAILABILITY GROUP ag2 FAILOVER;
-	go
-	```
-- is_failover_ready.sql  
-	```bat
-	select is_failover_ready
-	from sys.dm_hadr_database_replica_cluster_states
-	where replica_id in (
-	  select replica_id
-	  from sys.dm_hadr_availability_replica_states where is_local=1
-	);
-	go
-	```
-- role.sql  
-	```bat
-	select role_desc from sys.dm_hadr_availability_replica_states where is_local=1;
-	go
-	```
-- setSecondary.sql  
-	```bat
-	ALTER AVAILABILITY GROUP ag2 SET (ROLE = SECONDARY);
-	go
-	```
-- start.sh for exec resource
 
 
 Refarence:
