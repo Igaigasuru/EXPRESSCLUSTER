@@ -247,7 +247,7 @@ https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-availability-group-c
 ### Install EXPRESSCLUSTER and configure AG cluster
 #### On all servers
 1. Install EXPRESSCLUSTER and register its license.  
-2. Crete .sql scripts.  
+2. Create .sql scripts.  
 	e.g.) Under "/opt/nec/clusterpro/scripts/failover/sqlcommand/"  
   	- [agFailover.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/agFailover.sql)  
 	- [is_failover_ready.sql](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/scripts/AG%20cluster/is_failover_ready.sql)  
