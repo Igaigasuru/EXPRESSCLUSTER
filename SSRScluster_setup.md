@@ -45,7 +45,7 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 				- Add accounts which will be used from both Primary and Secondary server  
 					(e.g. domain user for Windows authentication or sa account for SQL authentication)
 				- Set [folder path which is on sd resource Data Partition] for Data Root Directory
-		1. Move group back to Secondary server
+		1. Move group back to Primary server
 1. SSRS Setup
 	1. On Primary server
 		1. Start SQL Server service and Reporting Services service  
@@ -64,7 +64,7 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 				Backup key file and store it under \<folder path which is on sd resource Data Partition\>
 		1. Comfirm that you can connect to Report Server from a client
 			- http://\<fip\>/Reports  
-			http://10.4.3.160/ReportServer
+			http://\<fip\>/ReportServer
 		1. Stop SQL Server service and Reporting Services service  
 		1. Move group to Secondary server  
 	1. On Secondary server
@@ -91,7 +91,7 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 				- Restore backup key file which was created in step 3.i.b.
 		1. Comfirm that you can connect to Report Server from a client
 			- http://\<fip\>/Reports  
-			http://10.4.3.160/ReportServer
+			http://\<fip\>/ReportServer
 		1. Stop SQL Server service and Reporting Services service  
 		1. Move group back to Primary server  
 1. MSSQL cluster setup
@@ -109,7 +109,7 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 			- script:
 				- start.bat:  
 				Execute "rskermgmt -a" command to restore key.  
-				Refer the appendix ample script.  
+				Refer the appendix sample script.  
 				- stop.bat:  No need to set.
 				- Start/Stop:  synchronous
 		1. Change resource dependency as the below:  
