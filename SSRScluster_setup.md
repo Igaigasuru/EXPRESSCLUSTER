@@ -30,7 +30,7 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 			- Database Engine Configuration:
 				- Add accounts which will be used from both Primary and Secondary server  
 					(e.g. domain user for Windows authentication or sa account for SQL authentication)
-				- Set \<folder path which is on sd resource Data Partition\> for Data Root Directory
+				- Set \<Folder path which is on sd resource Data Partition\> for Data Root Directory
 		1. Move group to Secondary server
 	1. On Secondary server
 		1. Install MSSQL Server
@@ -44,8 +44,21 @@ EXPRESSCLUSTER X 3.3 for Windows (internal version: 11.34)
 			- Database Engine Configuration:
 				- Add accounts which will be used from both Primary and Secondary server  
 					(e.g. domain user for Windows authentication or sa account for SQL authentication)
-				- Set [folder path which is on sd resource Data Partition] for Data Root Directory
+				- Set \<Temporary folder\> for Data Root Directory
+		1. Change SQL Server Startup Parameters
+			1. Start SQL Server Configuration Manager
+			1. Right click "SQLServer (<Instance Name>)", select "Properties" and go to "Startup Parameters" tab.
+			1. Change Startup Parameters to the same as Primary Server setting  
+				*Before*  
+				　　-d\<Temporary folder\>\MSSQL12.MSSQLSERVER\MSSQL\DATA\master.mdf  
+				　　-e\<Temporary folder\>\MSSQL12.MSSQLSERVER\MSSQL\Log\ERRORLOG  
+				　　-l\<Temporary folder\>\MSSQL12.MSSQLSERVER\MSSQL\DATA\mastlog.ldf  
+				*After*  
+				　　-d\<Folder path which is on sd resource Data Partition\>\MSSQL12.MSSQLSERVER\MSSQL\DATA\master.mdf  
+				　　-e\<Folder path which is on sd resource Data Partition\>\MSSQL12.MSSQLSERVER\MSSQL\Log\ERRORLOG  
+				　　-l\<Folder path which is on sd resource Data Partition\>\MSSQL12.MSSQLSERVER\MSSQL\DATA\mastlog.ldf  
 		1. Move group back to Primary server
+
 1. SSRS Setup
 	1. On Primary server
 		1. Start SQL Server service and Reporting Services service  
