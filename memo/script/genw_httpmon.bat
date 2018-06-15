@@ -6,7 +6,7 @@ rem ***************************************
 rem ==============================================================
 rem Set powershell script file path and a target Web Server URI.
 rem ==============================================================
-set SCRIPT=<File path of httpmon.ps1>
+set SCRIPT=<File path of [Powershell Script](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/httpmon.ps1)>
 set URI=<Targt URI>
 
 Powershell %SCRIPT% %URI%
