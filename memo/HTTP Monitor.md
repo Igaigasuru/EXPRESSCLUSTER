@@ -5,4 +5,4 @@
 1. Add genw to cluster with the settings below:  
     - Monitor Timing: Active
     - Monitor Target: Sesource for Web service (such as IIS service)
-    - genw.bat: Sample
+    - genw.bat: [Sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/genw_httpmon.bat)
