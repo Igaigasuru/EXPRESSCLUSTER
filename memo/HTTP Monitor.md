@@ -13,7 +13,7 @@
 
 ## With Authentication
 ### Preparation for Powershell script
-1. Store Powershell script to check HTTP reply ([sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/httpmon.ps1)) on all cluster servers.  
+1. Store Powershell script to check HTTP reply ([sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/httpmon_auth.ps1)) on all cluster servers.  
   e.g.) C:\Program Files\EXPRESSCLUSTER\scripts\httpmonitor\httpmon.ps1
 1. Change all cluster servers Powershell Script Execution Policy to enable httpmon.ps1 execution.
 
@@ -29,7 +29,7 @@
 1. Add genw to cluster with the settings below:  
     - Monitor Timing: Active
     - Monitor Target: Resource for Web service (such as IIS service)
-    - genw.bat: [Sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/genw_httpmon.bat)
+    - genw.bat: [Sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/genw_httpmon_auth.bat)
 
 ## Reference (in Japanese)
 https://qiita.com/hidehara/items/3847132ea0745a751435  
