@@ -9,7 +9,7 @@
 1. Add genw to cluster with the settings below:  
     - Monitor Timing: Active
     - Monitor Target: Resource for Web service (such as IIS service)
-    - genw.bat: [Sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/genw_httpmon.bat)
+    - Select User application and set the Powershell script file path.
 
 ## With Authentication
 ### Preparation for Powershell script
@@ -29,7 +29,7 @@
 1. Add genw to cluster with the settings below:  
     - Monitor Timing: Active
     - Monitor Target: Resource for Web service (such as IIS service)
-    - genw.bat: [Sample](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/memo/script/genw_httpmon_auth.bat)
+    - Select User application and set the Powershell script file path.
 
 ## Reference (in Japanese)
 https://qiita.com/hidehara/items/3847132ea0745a751435  
