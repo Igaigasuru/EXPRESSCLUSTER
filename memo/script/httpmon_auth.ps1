@@ -1,7 +1,7 @@
 #Set Parameters
-$uri = $Args[0]
-$name = $Args[1]
-$pass = $Args[2]
+$uri = <Set the target URI>
+$name = <Set an username for the suthentication>
+$pass = <Set the password file path>
 
 #Make credential
 $secpass = cat $pass | ConvertTo-SecureString -Key (1..16)
