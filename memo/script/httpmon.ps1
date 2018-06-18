@@ -1,5 +1,5 @@
 #Set parameters from parameters
-$uri = $Args[0]
+$uri = <Set the target URI>
 
 #Send request to the target Web Server
 $result = Invoke-WebRequest -Uri $uri -UseBasicParsing
