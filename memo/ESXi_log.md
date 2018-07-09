@@ -74,11 +74,46 @@ VM のインベントリ削除（unregister）
 ```
 
 ## データストアの All Path Down
-hostd.log を All Paths で検索。enter か exit か。
-All Path Down じゃないデータストア以上はたぶん vmkernel.log に出る。データストア名とか UUID とかで検索すればたぶん見つかる。
+早いのは hostd.log を All Paths で検索。enter か exit か。
+ただし、実際にパス切れてから APD と断定されるまで Timeout 10sec あるっぽいので、実際に切れた時間見るなら vmkernel を「being marked "」で検索がいいかも。
+そのほか細かいこと見るにも vmkernel。
+
+SCSI 応答なくなる @vmkernel.log
 ```bat
-2018-07-05T21:15:20.245Z info hostd[AA40B70] [Originator@6876 sub=Vimsvc.ha-eventmgr] Event 2417 : Device or filesystem with identifier naa.60014055c425cd10a874374b415629b3 has entered the All Paths Down state.  
-2018-07-05T21:16:38.337Z info hostd[9F40B70] [Originator@6876 sub=Vimsvc.ha-eventmgr] Event 2437 : Device or filesystem with identifier naa.60014055c425cd10a874374b415629b3 has exited the All Paths Down state.
+2018-07-06T21:02:01.201Z cpu14:66536)WARNING: iscsi_vmk: iscsivmk_ConnReceiveAtomic: vmhba64:CH:0 T:0 CN:0: Failed to receive data: Connection closed by peer
+2018-07-06T21:02:01.201Z cpu14:66536)WARNING: iscsi_vmk: iscsivmk_ConnReceiveAtomic: Sess [ISID: 00023d000001 TARGET: iqn.2018-03.nec.com: TPGT: 1 TSIH: 0]
+2018-07-06T21:02:01.201Z cpu14:66536)WARNING: iscsi_vmk: iscsivmk_ConnReceiveAtomic: Conn [CID: 0 L: 172.31.254.21:58200 R: 172.31.254.10:3260]
+2018-07-06T21:02:01.202Z cpu14:66536)iscsi_vmk: iscsivmk_ConnRxNotifyFailure: vmhba64:CH:0 T:0 CN:0: Connection rx notifying failure: Failed to Receive. State=Online
+2018-07-06T21:02:01.202Z cpu28:66292)WARNING: iscsi_vmk: iscsivmk_StopConnection: vmhba64:CH:0 T:0 CN:0: iSCSI connection is being marked "OFFLINE" (Event:6)
+2018-07-06T21:02:01.265Z cpu2:66518)NMP: nmp_ThrottleLogForDevice:3617: Cmd 0x2a (0x43950c44a000, 65575) to dev "naa.60014055c425cd10a874374b415629b3" on path "vmhba64:C0:T0:L0" Failed: H:0x2 D:0x0 P:0x0 Invalid sense data: 0x0 0x0 0x0. Act:EVAL
+2018-07-06T21:02:01.265Z cpu2:66518)WARNING: NMP: nmp_DeviceRequestFastDeviceProbe:237: NMP device "naa.60014055c425cd10a874374b415629b3" state in doubt; requested fast path state update...
+```
+
+10秒後に APD と断定 @vmkernel.log
+```bat
+2018-07-06T21:02:11.204Z cpu0:65641)HBX: 6214: APD EventType: APD_START (3) for vol 'iSCSI'
+2018-07-06T21:02:11.204Z cpu0:65641)ScsiDevice: 4993: Device state of naa.60014055c425cd10a874374b415629b3 set to APD_START; token num:1
+2018-07-06T21:02:11.204Z cpu0:65641)StorageApdHandler: 1205: APD start for 0x4302ff581ad0 [naa.60014055c425cd10a874374b415629b3]
+```
+
+断定されると hostd にも出るよ @hostd.log
+```bat
+2018-07-06T21:02:11.204Z info hostd[B781B70] [Originator@6876 sub=Vimsvc.ha-eventmgr] Event 3026 : Device or filesystem with identifier naa.60014055c425cd10a874374b415629b3 has entered the All Paths Down state.
+```
+
+APD からの復帰 @vmkernel
+```bat
+2018-07-06T21:02:22.556Z cpu31:66696)WARNING: iscsi_vmk: iscsivmk_StartConnection: vmhba64:CH:0 T:0 CN:0: iSCSI connection is being marked "ONLINE"
+2018-07-06T21:02:22.556Z cpu31:66696)WARNING: iscsi_vmk: iscsivmk_StartConnection: Sess [ISID: 00023d000001 TARGET: iqn.2018-03.nec.com: TPGT: 1 TSIH: 0]
+2018-07-06T21:02:22.556Z cpu31:66696)WARNING: iscsi_vmk: iscsivmk_StartConnection: Conn [CID: 0 L: 172.31.254.21:18064 R: 172.31.254.10:3260]
+2018-07-06T21:02:22.556Z cpu0:65642)ScsiDevice: 5015: Setting Device naa.60014055c425cd10a874374b415629b3 state back to 0x2
+2018-07-06T21:02:22.556Z cpu0:65642)ScsiDevice: 5036: Device naa.60014055c425cd10a874374b415629b3 is Out of APD; token num:1
+2018-07-06T21:02:22.559Z cpu2:65629)HBX: 6214: APD EventType: APD_EXIT (4) for vol 'iSCSI'
+```
+
+復帰しても hostd に出るよ @hostd.log
+```bat
+2018-07-06T21:02:22.566Z info hostd[B381B70] [Originator@6876 sub=Vimsvc.ha-eventmgr] Event 3031 : Device or filesystem with identifier naa.60014055c425cd10a874374b415629b3 has exited the All Paths Down state.
 ```
 
 ## ssh 接続
