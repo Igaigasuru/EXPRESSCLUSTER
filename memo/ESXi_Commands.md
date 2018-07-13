@@ -17,3 +17,6 @@ ifconfig
 
 ### esxcli network ip neighbor
 arp -a
+
+### esxcfg-vswitch <vSwitch名> -L/-U <物理NIC名(vmnic_xxxxx)>
+仮想スイッチと物理 NIC の紐づけ。 -L→紐づける　-U→紐づけ解除
