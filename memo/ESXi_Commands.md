@@ -12,7 +12,7 @@ https://orebibou.com/2014/06/vmware-esxi%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%
 tcpdump。dst/src host オプションとか使えなければ | grep でがんばる？  
 https://kb.vmware.com/s/article/1031186?lang=ja
 
-### esxcli network ip route ipv4
+### esxcli network ip interface ipv4 get
 ifconfig
 
 ### esxcli network ip neighbor
