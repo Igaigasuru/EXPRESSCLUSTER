@@ -20,3 +20,9 @@ arp -a
 
 ### esxcfg-vswitch <vSwitch名> -L/-U <物理NIC名(vmnic_xxxxx)>
 仮想スイッチと物理 NIC の紐づけ。 -L→紐づける　-U→紐づけ解除
+
+### esxcli storage vmfs extent list
+デバイス名とパーティション番号の確認
+
+### voma -m vmfs -f \[check | fix\] -d /vmfs/devices/disks/<デバイス名:パーティション番号>
+vmfs メタデータの整合性確認/修復
