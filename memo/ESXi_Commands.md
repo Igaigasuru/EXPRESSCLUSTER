@@ -16,11 +16,13 @@ https://kb.vmware.com/s/article/1031186?lang=ja
 ifconfig
 
 ### esxcli network ip neighbor
-arp -a
+arp -a  
 esxcffg-route -n でもいい。
 
 ### esxcfg-vswitch <vSwitch名> -L/-U <物理NIC名(vmnic_xxxxx)>
-仮想スイッチと物理 NIC の紐づけ。 -L→紐づける　-U→紐づけ解除
+仮想スイッチと物理 NIC の紐づけ。  
+-L→紐づける  
+-U→紐づけ解除
 
 ### esxcli storage vmfs extent list
 デバイス名とパーティション番号の確認
