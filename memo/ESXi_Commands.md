@@ -29,8 +29,8 @@ esxcffg-route -n でもいい。
 vmfs メタデータの整合性確認/修復
 
 ### pktcap-uw --switchport \<switch port\> -o \<output file path\>
-仮想スイッチ回りのパケットキャプチャ。
-switchport は net-stats -l コマンドで確認可能。
-アウトプットは /vmfs 配下が消えなくていいかも。キャプチャファイルは SCP で取り出して WireShark とかで確認。
-仮想スイッチ回り以外もキャプチャできる：
+仮想スイッチ回りのパケットキャプチャ。  
+switchport は net-stats -l コマンドで確認可能。  
+アウトプットは /vmfs 配下が消えなくていいかも。キャプチャファイルは SCP で取り出して WireShark とかで確認。  
+仮想スイッチ回り以外もキャプチャできる：  
 http://noaboutsnote.hatenablog.com/entry/pktcap-uw_usage
