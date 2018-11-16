@@ -9,7 +9,8 @@ neighbor 宛ての送信ポート表示
 https://orebibou.com/2014/06/vmware-esxi%E3%81%AE%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9-esxcfg-route/
 
 ### tcpdump-uw -i vmkX host \<IP Address\>
-tcpdump。-e 付けると MAC アドレス表示になる。  
+tcpdump。  
+-e 付けると MAC アドレス表示になる。  
 https://kb.vmware.com/s/article/1031186?lang=ja
 
 ### esxcli network ip interface ipv4 get
@@ -33,6 +34,15 @@ vmfs メタデータの整合性確認/修復
 ### pktcap-uw --switchport \<switch port\> -o \<output file path\>
 仮想スイッチ回りのパケットキャプチャ。  
 switchport は net-stats -l コマンドで確認可能。  
-アウトプットは /vmfs 配下が消えなくていいかも。キャプチャファイルは SCP で取り出して WireShark とかで確認。  
+アウトプットは /vmfs 配下が消えなくていいかも。  
+キャプチャファイルは SCP で取り出して WireShark とかで確認。  
 仮想スイッチ回り以外もキャプチャできる：  
 http://noaboutsnote.hatenablog.com/entry/pktcap-uw_usage
+
+### esxtop
+top コマンド。
+esxtop 実行したあと、n とか d とか押すと見れるものが変わる。  
+パケロスとかもチェックできる。
+http://instructor8010.hatenablog.jp/entry/2017/09/26/080000  
+http://www.running-system.com/wp-content/uploads/2015/04/ESXTOP_vSphere6.pdf  
+http://bambi.paddle-point.com/entry/esxtop-storage1
