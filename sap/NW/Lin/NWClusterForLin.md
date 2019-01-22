@@ -154,14 +154,14 @@ On both nodes
 
 ### SAP NW installation
 
-1. Install ASCS instance with "ascs_hostname" on node1
+1. Install ASCS instance with ascs virtualhostname on node1
 	```bat
 	# env SAPINST_USE_HOSTNAME=ascssv ./sapinst
 	```
 	- Refer "Parameters" for Instance ID (INO), Instance Name and virtual hostname for ASCS.
 	- If installation path is required, ★
 
-1. Install ERS instance with "ascs_hostname" on node1
+1. Install ERS instance with ers virtualhostname on node1
 	```bat
 	# env SAPINST_USE_HOSTNAME=erssv ./sapinst
 	```
@@ -171,20 +171,9 @@ On both nodes
 	# ./sapinst
 	```
 
-1. Move ERS-Group to node2
-
-1. Install ERS instance with "ascs_hostname" on node2
-	```bat
-	# env SAPINST_USE_HOSTNAME=erssv ./sapinst
-	```
-
 1. Install AAS on node1 (*)
 	```bat
 	# ./sapinst
 	```
 
 	* If AAS/PAS are not required for this nodes (installation is not required or installed on another nodes), please ignore.
-
-1. Move ERS-Group back to node1
-
-1. If ENSA is installed, switch to ENSA2
