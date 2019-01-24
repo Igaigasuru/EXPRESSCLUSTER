@@ -2,7 +2,10 @@
 
 ## Overview
 This article shows a setup flow of 2 nodes SAP Netweaver cluster on Linux with 1 NFS Server.
+
+## Note
 DB for NW shuold be setup but it is out of scope of this article.
+NFS Server is also out of scope.
 
 ## Reference
 - About NW Master Guide:  
