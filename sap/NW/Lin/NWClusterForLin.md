@@ -3,9 +3,39 @@
 ## Overview
 This article shows a setup flow of 2 nodes SAP Netweaver cluster on Linux with 1 NFS Server.
 
+## System Configuratin
+
+<LAN>
+ |
+ |  +----------------------------+
+ +--| Primary Server             |
+ |  | - Linux OS                 |
+ |  | - SAP NetWeaver            |
+ |  | - EXPRESSCLUSTER X 4.1     |
+ |  +----------------------------+
+ |                                       +----------------------------+
+ +---------------------------------------| DB Server                  |
+ |                                       |                            |
+ |                                       +----------------------------+
+ |
+ |                                       +----------------------------+
+ +---------------------------------------| NFS Server                  |
+ |                                       |                             |
+ |                                       +----------------------------+
+ |  +----------------------------+
+ +--| Secondary Server           |
+ |  | - Linux OS                 |
+ |  | - SAP NetWeaver            |
+ |  | - EXPRESSCLUSTER X 4.1     |
+ |  +----------------------------+
+ |
+
 ## Note
-DB for NW shuold be setup but it is out of scope of this article.
-NFS Server is also out of scope.
+- DB Server and NFS Serer are used by SAP NetWeaver and should be accessible from both Primary and Secondary Servers.
+- DB Server setup is out of scope of this article.
+	For more details about DB Server (System requirements, compatibles, howto setup ...etc), check SAP NetWeaver Guide.
+- DB Server setup is used by NetWeaver is out of scope of this article.
+  However, configure mount point accoding to this article becasue NFS Server is access by SAP NetWeaver to read the same SAP instance profiles on both Primary and Secondary Servers.
 
 ## Reference
 - About NW Master Guide:  
@@ -32,34 +62,28 @@ Instances
 	Instance ID (INO):	20
 	Instance Name:	ERS20
 	Hostname:	erssv (assigned to fip2)
-- PAS Instance (*)
+- PAS Instance
 	Instance ID (INO):	30
 	Instance Name:	D30
-- AAS Instance (*)
+- AAS Instance
 	Instance ID (INO):	40
 	Instance Name:	D40
-- DA1 Instance (*)
+- DA1 Instance
 	Instance ID (INO):	97
 	Instance Name:	SMDA97
-- DA2 Instance (*)
+- DA2 Instance
 	Instance ID (INO):	96
 	Instance Name:	SMDA96
-
-	\* If AAS/PAS are not required for this nodes (installation is not required or installed on another nodes), please ignore.
 
 #### ECX
 
 Failover groups
 - ASCS-Group
 - ERS-Group
-- PAS-Group (*)
-- AAS-Group (*)
-- DA1-Group (*)
-- DA2-Group (*)
-- hostexec1-Group
-- hostexec2-Group
-
-	\* If AAS/PAS are not required for this nodes (installation is not required or installed on another nodes), please ignore.
+- PAS-Group
+- AAS-Group
+- DA1-Group
+- DA2-Group
 
 ### Preparation
 On NFS Server
@@ -147,14 +171,21 @@ On both nodes
 
 1. Install ECX and register licenses
 
+1. Install Connector for SAP
+	```bat
+	rpm -i expresscls_spnw-<ECX version>.x86_64.rpm
+	```
+
 1. Create the following failover groups:  
   - ASCS-Group
   - ERS-Group
 
 1. Add fip to the both goups.
+  - ASCS-Group
+	fip-ascssv
+  - ERS-Group
 
 1. Activate both groups on node1.
-
 
 ### SAP NW installation
 
@@ -163,21 +194,81 @@ On both nodes
 	# env SAPINST_USE_HOSTNAME=ascssv ./sapinst
 	```
 	- Refer "Parameters" for Instance ID (INO), Instance Name and virtual hostname for ASCS.
-	- If installation path is required, ★
+	- If installation path is required, specify "/sapmnt/NEC".
 
-1. Install ERS instance with ers virtualhostname on node1
+1. Install ERS instance with ers virtualhostname on both node1
 	```bat
 	# env SAPINST_USE_HOSTNAME=erssv ./sapinst
 	```
+	- Refer "Parameters" for Instance ID (INO), Instance Name and virtual hostname for ERS.
+	- If installation path is required, specify "/sapmnt/NEC".
 
-1. Install PAS on node1 (*)
+1. If ENSA is installed, update to ENSA2
+
+1. Install PAS on node1
 	```bat
 	# ./sapinst
 	```
+	- Refer "Parameters" for Instance ID (INO) and Instance Name.
+	- If installation path is required, specify "/sapmnt/NEC".
 
-1. Install AAS on node1 (*)
+1. Install AAS on node2
 	```bat
 	# ./sapinst
 	```
+	- Refer "Parameters" for Instance ID (INO) and Instance Name.
+	- If installation path is required, specify "/sapmnt/NEC".
 
-	* If AAS/PAS are not required for this nodes (installation is not required or installed on another nodes), please ignore.
+1. Edit all SAP instance profiles on NFS Server, /sapmnt/NEC/profilNEC_<Instance name><INO>_<hostname>, as the below:
+	```bat
+	service/halib = /usr/sap/<SID>/<インスタンス名><INO>/exe/saphascriptco.so
+	service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
+	```
+1. Edit all DA instance profiles on both nodes, /usr/sap/<DASID>/SYS/profile/NEC_<Instance name><INO>_<hostname>, as the below:
+	```bat
+	service/halib = /usr/sap/hostctrl/exe/saphascriptco.so
+	service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
+	```
+1. Give sudo permission on SAP NW user account to enable Connector for SAP by executing the following command:
+	```bat
+	# visudo
+	```
+		Add the following:
+		```bat
+		Defaults:%sapsys        !requiretty
+
+		%sapsys ALL=(ALL)       NOPASSWD: ALL
+		```
+1. Give sudo permission on user group which is created whole SAP NW installation.
+
+1. Register SAP License.
+
+1. Disable SAP instance services auto startup on both Servers.
+	```bat
+	# systemctl disable sapinit
+	# chkconfig --list sapinit
+	sapinit         0:off   1:off   2:off   3:off   4:off   5:off   6:off
+	```
+
+1. Disable ERS instance auto startup on both Servers.
+	```bat
+	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
+	Autostart=0
+	```
+
+1. Disable DA instances auto startup on both Servers.
+	```bat
+	# vi /usr/sap/<DA SID>/SYS/profile/<DA SID>_SMDA<INO>_<hostname>
+
+	Autostart=0
+	```
+
+1. Enable ERS instance auto stop on both Servers.
+	```bat
+	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
+
+	# Restart_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+	Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+	```
+
+### Cluster setup
