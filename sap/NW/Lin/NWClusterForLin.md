@@ -176,6 +176,12 @@ On both nodes
 	```bat
 	rpm -i expresscls_spnw-<ECX version>.x86_64.rpm
 	```
+	or, store the files as the below.
+	```bat
+	/opt/nec/clusterpro/bin/clp_shi_connector
+	/opt/nec/clusterpro/etc/clp_shi_connector.conf
+	/opt/nec/clusterpro/bin/clp_shi_connector_wrapper
+	```
 
 1. Create the following failover groups:  
 	- ASCS-Group
