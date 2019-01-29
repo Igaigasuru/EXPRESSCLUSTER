@@ -76,25 +76,17 @@ Instances
 	Instance ID (INO):	96
 	Instance Name:	SMDA96
 
-#### ECX
-
-Failover groups
-- ASCS-Group
-- ERS-Group
-- PAS-Group
-- AAS-Group
-- DA1-Group
-- DA2-Group
-
 ### Preparation
-On NFS Server
-
+#### NFS Server
 1. Setup NFS Server  
 	1. Install NFS Server
 	1. Create and export the following folders:  
 		- /opt/nfsroot/sapmnt/NEC
 		- /opt/nfsroot/saptrans
+	1. Create the following file for diskw:
+		- /sapmnt/NEC/.nfscheck
 
+#### Cluster Servers
 On both nodes
 
 1. Disable SE Linux
@@ -211,7 +203,7 @@ On both nodes
 	- Refer "Parameters" for Instance ID (INO), Instance Name and virtual hostname for ERS.
 	- If installation path is required, specify "/sapmnt/NEC".
 
-1. If ENSA is installed, update to ENSA2
+1. If ENSA is installed, update it to ENSA2
 
 1. Install PAS on node1
 	```bat
@@ -239,41 +231,453 @@ On both nodes
 		service/halib = /usr/sap/hostctrl/exe/saphascriptco.so
 		service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
 	```
-1. Give sudo permission on SAP NW user account to enable Connector for SAP by executing the following command:
-	```bat
-	# visudo
-		Defaults:%sapsys        !requiretty
 
-		%sapsys ALL=(ALL)       NOPASSWD: ALL
-	```
-1. Give sudo permission on user group which is created whole SAP NW installation.
+1. Change user account settings
+	1. Give sudo permission on SAP NW user account to enable Connector for SAP by executing the following command:
+		```bat
+		# visudo
+			Defaults:%sapsys        !requiretty
+
+			%sapsys ALL=(ALL)       NOPASSWD: ALL
+		```
+	1. Give sudo permission on user group which is created whole SAP NW installation.
 
 1. Register SAP License.
 
-1. Disable SAP instance services auto startup on both Servers.
-	```bat
-	# systemctl disable sapinit
-	# chkconfig --list sapinit
-	sapinit         0:off   1:off   2:off   3:off   4:off   5:off   6:off
-	```
+1. Change instance service settings.
+	1. Disable SAP instance services auto startup on both Servers.
+		```bat
+		# systemctl disable sapinit
+		# chkconfig --list sapinit
+		sapinit         0:off   1:off   2:off   3:off   4:off   5:off   6:off
+		```
 
-1. Disable ERS instance auto startup on both Servers.
-	```bat
-	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
-		Autostart=0
-	```
+	1. Disable ERS instance auto startup on both Servers.
+		```bat
+		# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
+			Autostart=0
+		```
 
-1. Disable DA instances auto startup on both Servers.
-	```bat
-	# vi /usr/sap/<DA SID>/SYS/profile/<DA SID>_SMDA<INO>_<hostname>
-		Autostart=0
-	```
+	1. Disable DA instances auto startup on both Servers.
+		```bat
+		# vi /usr/sap/<DA SID>/SYS/profile/<DA SID>_SMDA<INO>_<hostname>
+			Autostart=0
+		```
 
-1. Enable ERS instance auto stop on both Servers.
-	```bat
-	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
-		# Restart_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
-		Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
-	```
+	1. Enable ERS instance auto stop on both Servers.
+		```bat
+		# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
+			# Restart_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+			Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+		```
 
 ### Cluster setup
+
+#### Failover group settings
+1. Create and edit following groups
+
+- ASCS-Group
+	- Failover Exclusive Attribute:	Normal exclusion
+	- Stop Dependency:	ERS-Group, AAS-Group, PAS-Group
+		Wait the Dependent Groups when a Cluster Stops
+		Wait the Dependent Groups when a Server Stops
+- ERS-Group
+	- Startup Server:	Secondary Server
+			Primary Server
+	- Failback Attribute:	Auto Failback
+	- Start Dependency:	ASCS-Group
+
+- PAS-Group
+	- Startup Server:	Primary Server
+	- Failback Attribute:	Auto Failback
+	- Start Dependency:	ASCS-Group
+
+- AAS-Group
+	- Startup Server:	Secondary Server
+	- Failback Attribute:	Auto Failback
+	- Start Dependency:	ASCS-Group
+
+- DA1-Group
+	- Startup Server:	Primary Server
+	- Failback Attribute:	Auto Failback
+
+- DA2-Group
+	- Startup Server:	Secondary Server
+	- Failback Attribute:	Auto Failback
+
+- hostexex1-Group
+	- Startup Server:	Primary Server
+	- Failback Attribute:	Auto Failback
+
+- hostexex2-Group
+	- Startup Server:	Secondary Server
+	- Failback Attribute:	Auto Failback
+
+#### Resource settings
+1. Add and edit following resources
+
+- ASCS-Group
+	- Floating IP resource
+		- Name:	fip-ascssv
+	- NAS resource
+		- Name:	nas-ascs
+		- Shared Name:	/opt/nfsroot/sapascs
+		- Mount Point:	/usr/sap/NEC/ASCS10
+		- File System:	nfs
+	- EXEC resource 1
+		- Name:	exec-ascs-SAP-instance_NEC_10
+		- Dependency:	fip-ascssv, nas-ascs
+		- start.sh:	/root/sample/scripts/SAP-ASCS-instance/ascs_start.sh★
+		- stop.sh:	/root/sample/scripts/SAP-ASCS-instance/ascs_stop.sh★
+	- EXEC resource 2
+		- Name:	exec-ascs-SAP-service_NEC_10
+		- Dependency:	fip-ascssv, nas-ascs
+		- start.sh:	★
+		- stop.sh:	★
+
+- ERS-Group
+	- Floating IP resource
+		- Name:	fip-erssv
+	- EXEC resource 1
+		- Name:	exec-check-ENSA2
+		- start.sh:	★
+	- EXEC resource 2
+		- Name:	exec-ERS-SAP-instance_NEC_20
+		- Dependency:	exec-check-ENSA2
+		- start.sh:	/root/sample/scripts/SAP-ERS-instance/ers_start.sh
+		- stop.sh:	/root/sample/scripts/SAP-ERS-instance/ers_stop.sh
+	- EXEC resource 3
+		- Name:	exec-ERS-SAP-service_NEC_20
+		- start.sh:	★
+		- stop.sh:	★
+
+- PAS-Group
+	- EXEC resource 1
+		- Name:	exec-PAS-SAP-instance_NEC_30
+		- start.sh:	★
+		- stop.sh:	★
+	- EXEC resource 2
+		- Name:	exec-PAS-SAP-service_NEC_30
+		- start.sh:	★
+		- stop.sh:	★
+
+- AAS-Group
+	- EXEC resource 1
+		- Name:	exec-AAS-SAP-instance_NEC_30
+		- start.sh:	★
+		- stop.sh:	★
+	- EXEC resource 2
+		- Name:	exec-AAS-SAP-service_NEC_30
+		- start.sh:	★
+		- stop.sh:	★
+
+- DA1-Group
+	- EXEC resource 1
+		- Name:	exec-DA1-instance_DAA_97
+		- start.sh:	★
+		- stop.sh:	★
+	- EXEC resource 2
+		- Name:	exec-DA1-service_DAA_97
+		- start.sh:	★
+		- stop.sh:	★
+
+- DA2-Group
+	- EXEC resource 1
+		- Name:	exec-DA2-instance_DAA_96
+		- start.sh:	★
+		- stop.sh:	★
+	- EXEC resource 2
+		- Name:	exec-DA2-service_DAA_96
+		- start.sh:	★
+		- stop.sh:	★
+
+- hostexec1-Group
+	- EXEC resource 1
+		- Name:	exec-hostexec1
+		- start.sh:	★
+		- stop.sh:	★
+
+- hostexec2-Group
+	- EXEC resource 1
+		- Name:	exec-hostexec2
+		- start.sh:	★
+		- stop.sh:	★
+
+#### Monitor resource settings
+1. Add and edit following monitor resources
+
+- userw
+
+- miiw
+	- Recovery Action:	Executing failover to the recovery target
+	- Recovery Taret:	[All Groups]
+
+- genw 1
+	- Name:	genw-ASCS-instance-ENQ
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ascs-SAP-instance_NEC_10
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-instance-ENQ.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	ASCS-Group
+	- Maximum Reactivation Count:	0
+	- Final Action:	Stop the cluster service and shutdown OS
+
+- genw 2
+	- Name:	genw-ASCS-instance-MSG
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ascs-SAP-instance_NEC_10
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-instance-MSG.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	ASCS-Group
+	- Maximum Reactivation Count:	0
+	- Final Action:	No operation
+
+- genw 3
+	- Name:	genw-ASCS-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ascs-SAP-service_NEC_10
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-ascs-SAP-service_NEC_10
+	- Final Action:	No operation
+- genw 4
+	- Name:	genw-ERS-instance
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ERS-SAP-instance_NEC_20
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-ERS-instance.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-ERS-SAP-service_NEC_20
+	- Maximum Reactivation Count:	0
+	- Maximum Failover Count:	1
+	- Final Action:	No operation
+- genw 5
+	- Name:	genw-ERS-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ERS-SAP-service_NEC_20
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-ERS-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-ERS-SAP-service_NEC_20
+	- Maximum Reactivation Count:	0
+	- Maximum Failover Count:	1
+	- Final Action:	No operation
+- genw 6
+	- Name:	genw-PAS-instance
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-PAS-SAP-instance_NEC_30
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-PAS-instance.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-PAS-SAP-instance_NEC_30
+- genw 7
+	- Name:	genw-PAS-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-PAS-SAP-service_NEC_30
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-PAS-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-PAS-service_NEC_30
+	- Maximum Failover Count:	0
+- genw 8
+	- Name:	genw-AAS-instance
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-AAS-SAP-instance_NEC_40
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-AAS-instance.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-AAS-SAP-instance_NEC_30
+	- Maximum Failover Count:	0
+- genw 9
+	- Name:	genw-AAS-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-AAS-SAP-service_NEC_40
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-AAS-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-AAS-SAP-service_NEC_40
+	- Maximum Failover Count:	0
+- genw 10
+	- Name:	genw-DA1-instance
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-DA1-instance_DAA_97
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA1-instance.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-DA1-instance_DAA_97
+	- Maximum Failover Count:	0
+- genw 11
+	- Name:	genw-DA1-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-DA1-service_DAA_97
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA1-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-DA1-service_DAA_97
+	- Maximum Failover Count:	0
+- genw 12
+	- Name:	genw-DA2-instance
+	- Interval:	30
+	- Retry Count:	2
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-DA2-instance_DAA_96
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA2-instance.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-DA2-instance_DAA_96
+	- Maximum Failover Count:	0
+- genw 13
+	- Name:	genw-DA2-service
+	- Interval:	15
+	- Timeout:	60
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-DA2-service_DAA_96
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA2-service.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-DA2-service_DAA_96
+	- Maximum Failover Count:	0
+- genw 14
+	- Name:	genw-hostexec1
+	- Interval:	30
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-hostexec1
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec1.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-hostexec1
+	- Maximum Failover Count:	0
+- genw 15
+	- Name:	genw-hostexec2
+	- Interval:	30
+	- Retry Count:	1
+	- Wait Time to Start Monitoring:	30
+	- Monitor Timing:	Active
+	- Target Resource:	exec-hostexec2
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec2.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	exec-hostexec2
+	- Maximum Failover Count:	0
+- diskw
+	- Name:	diskw-NFS
+	- Interval:	15
+	- Timeout:	30
+	- Method:	READ(O_DIRECT)
+	- Monitor Target:	/sapmnt/NEC/.nfscheck
+	- Recovery Action:	Execute only the final action
+	- Final Action:	No operation
+- genw 14
+	- Name:	genw-check-ENSA2
+	- Interval:	30
+	- Timeout:	30
+	- Wait Time to Start Monitoring:	5
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ascs-SAP-instance_NEC_10
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-check-ENSA2.log
+	- Rotate Log:	Check
+	- Rotation Size:	1000000
+	- Recovery Action:	Custom settings
+	- Recovery Target:	ERS-Group
+	- Maximum Reactivation Count:	0
+	- Final Action:	Stop group
+
+	- Wait Time to Start Monitoring:	5
+	- Monitor Timing:	Active
+	- Target Resource:	exec-ascs-SAP-instance_NEC_10
+	- Script:	genw.sh★
+	- Monitor Type:	Synchronous
+	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec2.log
