@@ -4,7 +4,7 @@
 This article shows a setup flow of 2 nodes SAP Netweaver cluster on Linux with 1 NFS Server.
 
 ## System Configuratin
-
+```bat
 <LAN>
  |
  |  +----------------------------+
@@ -29,6 +29,7 @@ This article shows a setup flow of 2 nodes SAP Netweaver cluster on Linux with 1
  |  | - EXPRESSCLUSTER X 4.1     |
  |  +----------------------------+
  |
+```
 
 ## Note
 - DB Server and NFS Serer are used by SAP NetWeaver and should be accessible from both Primary and Secondary Servers.
@@ -177,13 +178,14 @@ On both nodes
 	```
 
 1. Create the following failover groups:  
-  - ASCS-Group
-  - ERS-Group
+	- ASCS-Group
+	- ERS-Group
 
 1. Add fip to the both goups.
-  - ASCS-Group
-	fip-ascssv
-  - ERS-Group
+	- ASCS-Group
+		- fip-ascssv
+	- ERS-Group
+		- fip-erssv
 
 1. Activate both groups on node1.
 
@@ -219,26 +221,25 @@ On both nodes
 	- Refer "Parameters" for Instance ID (INO) and Instance Name.
 	- If installation path is required, specify "/sapmnt/NEC".
 
-1. Edit all SAP instance profiles on NFS Server, /sapmnt/NEC/profilNEC_<Instance name><INO>_<hostname>, as the below:
+1. Edit all SAP instance profiles on NFS Server as the below:
 	```bat
-	service/halib = /usr/sap/<SID>/<インスタンス名><INO>/exe/saphascriptco.so
-	service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
+	#vi /sapmnt/NEC/profile/NEC_ERS20_erssv
+		service/halib = /usr/sap/<SID>/<Instance name><INO>/exe/saphascriptco.so
+		service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
 	```
-1. Edit all DA instance profiles on both nodes, /usr/sap/<DASID>/SYS/profile/NEC_<Instance name><INO>_<hostname>, as the below:
+1. Edit all DA instance profiles on both nodes as the below:
 	```bat
-	service/halib = /usr/sap/hostctrl/exe/saphascriptco.so
-	service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
+	# /usr/sap/<DASID>/SYS/profile/NEC_<Instance name><INO>_<hostname>
+		service/halib = /usr/sap/hostctrl/exe/saphascriptco.so
+		service/halib_cluster_connector = /opt/nec/clusterpro/bin/clp_shi_connector_wrapper
 	```
 1. Give sudo permission on SAP NW user account to enable Connector for SAP by executing the following command:
 	```bat
 	# visudo
-	```
-		Add the following:
-		```bat
 		Defaults:%sapsys        !requiretty
 
 		%sapsys ALL=(ALL)       NOPASSWD: ALL
-		```
+	```
 1. Give sudo permission on user group which is created whole SAP NW installation.
 
 1. Register SAP License.
@@ -253,22 +254,20 @@ On both nodes
 1. Disable ERS instance auto startup on both Servers.
 	```bat
 	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
-	Autostart=0
+		Autostart=0
 	```
 
 1. Disable DA instances auto startup on both Servers.
 	```bat
 	# vi /usr/sap/<DA SID>/SYS/profile/<DA SID>_SMDA<INO>_<hostname>
-
-	Autostart=0
+		Autostart=0
 	```
 
 1. Enable ERS instance auto stop on both Servers.
 	```bat
 	# vi /sapmnt/NEC/profile/NEC_ERS20_erssv
-
-	# Restart_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
-	Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+		# Restart_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
+		Start_Program_00 = local $(_ER) pf=$(_PFL) NR=$(SCSID)
 	```
 
 ### Cluster setup
