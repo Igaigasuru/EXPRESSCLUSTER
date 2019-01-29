@@ -175,6 +175,8 @@ On both nodes
 	/opt/nec/clusterpro/bin/clp_shi_connector_wrapper
 	```
 
+On Primary node
+
 1. Create the following failover groups:  
 	- ASCS-Group
 	- ERS-Group
