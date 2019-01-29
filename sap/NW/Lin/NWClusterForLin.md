@@ -329,13 +329,19 @@ On Primary node
 	- EXEC resource 1
 		- Name:	exec-ascs-SAP-instance_NEC_10
 		- Dependency:	fip-ascssv, nas-ascs
-		- start.sh:	/root/sample/scripts/SAP-ASCS-instance/ascs_start.sh★
-		- stop.sh:	/root/sample/scripts/SAP-ASCS-instance/ascs_stop.sh★
+		- start.sh:	[/root/sample/scripts/SAP-ASCS-instance/ascs_start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ascs_start.sh)
+		- stop.sh:	[/root/sample/scripts/SAP-ASCS-instance/ascs_stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ascs_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-ascs-SAP-service_NEC_10
 		- Dependency:	fip-ascssv, nas-ascs
 		- start.sh:	★
 		- stop.sh:	★
+
+	\* Change mode of start.sh and stop.sh:
+	```bat
+	# chmod 700 /root/sample/scripts/SAP-ASCS-instance/ascs_start.sh
+	# chmod 700 /root/sample/scripts/SAP-ASCS-instance/ascs_stop.sh
+	```
 
 - ERS-Group
 	- Floating IP resource
