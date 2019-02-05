@@ -357,8 +357,8 @@ On Primary node
 		- stop.sh:	[/root/sample/scripts/SAP-ERS-instance/ers_stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ers_stop.sh)
 	- EXEC resource 3
 		- Name:	exec-ERS-SAP-service_NEC_20
-		- [start.sh](★)
-		- [stop.sh](★)
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ers_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ers_service_stop.sh)
 
 	\* Change mode of start.sh and stop.sh:
 	```bat
@@ -369,54 +369,54 @@ On Primary node
 - PAS-Group
 	- EXEC resource 1
 		- Name:	exec-PAS-SAP-instance_NEC_30
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/PAS_instance_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/PAS_instance_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-PAS-SAP-service_NEC_30
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/PAS_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/PAS_service_stop.sh)
 
 - AAS-Group
 	- EXEC resource 1
 		- Name:	exec-AAS-SAP-instance_NEC_30
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/AAS_instance_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/AAS_instance_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-AAS-SAP-service_NEC_30
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/AAS_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/AAS_service_stop.sh)
 
 - DA1-Group
 	- EXEC resource 1
 		- Name:	exec-DA1-instance_DAA_97
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA1_instance_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA1_instance_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-DA1-service_DAA_97
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA1_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA1_service_stop.sh)
 
 - DA2-Group
 	- EXEC resource 1
 		- Name:	exec-DA2-instance_DAA_96
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA2_instance_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA2_instance_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-DA2-service_DAA_96
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA2_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/DA2_service_stop.sh)
 
 - hostexec1-Group
 	- EXEC resource 1
 		- Name:	exec-hostexec1
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/hostexec1_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/hostexec1_stop.sh)
 
 - hostexec2-Group
 	- EXEC resource 1
 		- Name:	exec-hostexec2
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/hostexec2_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/hostexec2_stop.sh)
 
 #### Monitor resource settings
 1. Add and edit following monitor resources
