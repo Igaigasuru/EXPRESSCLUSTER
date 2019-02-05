@@ -425,7 +425,7 @@ On Primary node
 
 - miiw
 	- Recovery Action:	Executing failover to the recovery target
-	- Recovery Taret:	[All Groups]
+	- Recovery Taret:	All Groups
 
 - genw 1
 	- Name:	genw-ASCS-instance-ENQ
@@ -434,7 +434,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ascs-SAP-instance_NEC_10
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/ASCS_instance_ENQ_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-instance-ENQ.log
 	- Rotate Log:	Check
@@ -451,7 +451,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ascs-SAP-instance_NEC_10
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/ASCS_instance_MSG_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-instance-MSG.log
 	- Rotate Log:	Check
@@ -469,7 +469,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ascs-SAP-service_NEC_10
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/ASCS_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-ASCS-service.log
 	- Rotate Log:	Check
@@ -484,7 +484,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ERS-SAP-instance_NEC_20
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/ERS_instance_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-ERS-instance.log
 	- Rotate Log:	Check
@@ -502,7 +502,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ERS-SAP-service_NEC_20
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/ERS_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-ERS-service.log
 	- Rotate Log:	Check
@@ -519,7 +519,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-PAS-SAP-instance_NEC_30
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/PAS_instance_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-PAS-instance.log
 	- Rotate Log:	Check
@@ -534,7 +534,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-PAS-SAP-service_NEC_30
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/PAS_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-PAS-service.log
 	- Rotate Log:	Check
@@ -549,7 +549,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-AAS-SAP-instance_NEC_40
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/AAS_instance_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-AAS-instance.log
 	- Rotate Log:	Check
@@ -565,7 +565,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-AAS-SAP-service_NEC_40
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/AAS_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-AAS-service.log
 	- Rotate Log:	Check
@@ -580,7 +580,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-DA1-instance_DAA_97
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/DA1_instance_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA1-instance.log
 	- Rotate Log:	Check
@@ -596,7 +596,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-DA1-service_DAA_97
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/DA1_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA1-service.log
 	- Rotate Log:	Check
@@ -611,7 +611,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-DA2-instance_DAA_96
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/DA2_instance_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA2-instance.log
 	- Rotate Log:	Check
@@ -627,7 +627,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-DA2-service_DAA_96
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/DA2_service_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-DA2-service.log
 	- Rotate Log:	Check
@@ -642,7 +642,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-hostexec1
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/hostexec1_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec1.log
 	- Rotate Log:	Check
@@ -657,7 +657,7 @@ On Primary node
 	- Wait Time to Start Monitoring:	30
 	- Monitor Timing:	Active
 	- Target Resource:	exec-hostexec2
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/hostexec2_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec2.log
 	- Rotate Log:	Check
@@ -673,14 +673,14 @@ On Primary node
 	- Monitor Target:	/sapmnt/NEC/.nfscheck
 	- Recovery Action:	Execute only the final action
 	- Final Action:	No operation
-- genw 14
+- genw 16
 	- Name:	genw-check-ENSA2
 	- Interval:	30
 	- Timeout:	30
 	- Wait Time to Start Monitoring:	5
 	- Monitor Timing:	Active
 	- Target Resource:	exec-ascs-SAP-instance_NEC_10
-	- Script:	genw.sh★
+	- Script:	[genw.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/genw/check_ENSA2_genw.sh)
 	- Monitor Type:	Synchronous
 	- Log Output Path:	/opt/nec/clusterpro/log/genw-check-ENSA2.log
 	- Rotate Log:	Check
@@ -689,10 +689,3 @@ On Primary node
 	- Recovery Target:	ERS-Group
 	- Maximum Reactivation Count:	0
 	- Final Action:	Stop group
-
-	- Wait Time to Start Monitoring:	5
-	- Monitor Timing:	Active
-	- Target Resource:	exec-ascs-SAP-instance_NEC_10
-	- Script:	genw.sh★
-	- Monitor Type:	Synchronous
-	- Log Output Path:	/opt/nec/clusterpro/log/genw-hostexec2.log
