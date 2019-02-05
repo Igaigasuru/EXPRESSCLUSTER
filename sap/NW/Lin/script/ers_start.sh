@@ -18,15 +18,17 @@ ulimit -s unlimited
 INSTANCE=ERS20
 #***************************************************************************
 
-# DIR_PATH="<directory_path_of_exclusive_control.sh>"
-SAP_ERS_INO="20"
-# EXCLUSIVE_GROUP="Exclusive-Group"
+DIR_PATH="<directory_path_of_exclusive_control.sh>"
+SAP_ERS_INO="20 21"
+EXCLUSIVE_GROUP="Exclusive-Group"
 TIMEOUT="300"
 DELAY="2"
 
 #***************************************************************************
 
 CLPLOGCMD="/usr/sbin/clplogcmd"
+
+CONFFILE="/opt/nec/clusterpro/etc/clp_shi_connector.conf"
 
 SID=`echo "${INSTANCE}" | cut -d_ -f1`
 INAME=`echo "${INSTANCE}" | cut -d_ -f2`
@@ -73,4 +75,3 @@ fi
 
 echo "EXIT"
 exit 0
-
