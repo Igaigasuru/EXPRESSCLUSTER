@@ -334,8 +334,8 @@ On Primary node
 	- EXEC resource 2
 		- Name:	exec-ascs-SAP-service_NEC_10
 		- Dependency:	fip-ascssv, nas-ascs
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ascs_service_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ascs_service_stop.sh)
 
 	\* Change mode of start.sh and stop.sh:
 	```bat
@@ -348,16 +348,23 @@ On Primary node
 		- Name:	fip-erssv
 	- EXEC resource 1
 		- Name:	exec-check-ENSA2
-		- start.sh:	★
+		- [start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/check_ENSA2_start.sh)
+		- [stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/check_ENSA2_stop.sh)
 	- EXEC resource 2
 		- Name:	exec-ERS-SAP-instance_NEC_20
 		- Dependency:	exec-check-ENSA2
-		- start.sh:	/root/sample/scripts/SAP-ERS-instance/ers_start.sh
-		- stop.sh:	/root/sample/scripts/SAP-ERS-instance/ers_stop.sh
+		- start.sh:	[/root/sample/scripts/SAP-ERS-instance/ers_start.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ers_start.sh)
+		- stop.sh:	[/root/sample/scripts/SAP-ERS-instance/ers_stop.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/sap/NW/Lin/script/ers_stop.sh)
 	- EXEC resource 3
 		- Name:	exec-ERS-SAP-service_NEC_20
-		- start.sh:	★
-		- stop.sh:	★
+		- [start.sh](★)
+		- [stop.sh](★)
+
+	\* Change mode of start.sh and stop.sh:
+	```bat
+	# chmod 700 /root/sample/scripts/SAP-ERS-instance/ascs_start.sh
+	# chmod 700 /root/sample/scripts/SAP-ERS-instance/ascs_stop.sh
+	```
 
 - PAS-Group
 	- EXEC resource 1
