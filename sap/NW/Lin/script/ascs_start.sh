@@ -1,6 +1,6 @@
 #!/bin/sh
 #***************************************************************************
-#*      ASCS instance  start.sh                     (Version : 3.3-2)      *
+#*      ASCS instance  start.sh                     (Version : 4.1-1)      *
 #***************************************************************************
 
 ulimit -s unlimited
@@ -15,11 +15,11 @@ ulimit -s unlimited
 #***************************************************************************
 
 #***************************************************************************
-INSTANCE="ASCS10"
+INSTANCE="NEC_ASCS10_ascssv"
 #***************************************************************************
 
-#DIR_PATH="<directory_path_of_ascs_post_handler.sh>"
-SAP_ERS_INO="20"
+DIR_PATH="<directory_path_of_ascs_post_handler.sh>"
+SAP_ERS_INO="20 21"
 TIMEOUT="300"
 DELAY="2"
 ENABLED="1"
@@ -27,6 +27,8 @@ ENABLED="1"
 #***************************************************************************
 
 CLPLOGCMD="/usr/sbin/clplogcmd"
+
+CONFFILE="/opt/nec/clusterpro/etc/clp_shi_connector.conf"
 
 SID=`echo "${INSTANCE}" | cut -d_ -f1`
 INAME=`echo "${INSTANCE}" | cut -d_ -f2`
@@ -53,6 +55,21 @@ then
 	exit 1
 fi
 
+if [ -f "${CONFFILE}" ]
+then
+	. ${CONFFILE}
+	if [ "${ENSA_VERSION}" != "" -a "${ENSA_VERSION}" != "1" ]
+	then
+		ENABLED="0"
+	fi
+fi
+
+if [ "${ENABLED}" = "0" ]
+then
+	${CLPLOGCMD} -m "ascs_post_handler is not launched by setting."
+	exit 0
+fi
+
 export SID
 export SAP_ERS_INO
 
@@ -62,12 +79,7 @@ then
         exit 0
 fi
 
-if [ ${ENABLED} = "1" ]
-then
-	${DIR_PATH}/ascs_post_handler.sh &
-else
-	${CLPLOGCMD} -m "ascs_post_handler is not launched by setting."
-fi
+${DIR_PATH}/ascs_post_handler.sh &
 
 echo "EXIT"
 exit 0
