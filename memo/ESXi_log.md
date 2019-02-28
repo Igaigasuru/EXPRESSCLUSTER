@@ -13,6 +13,11 @@ vmkernel.log を 「NIC Link」で検索。Down か Up か。
 2018-07-05T20:58:06.093Z cpu27:66317)<6>igb: vmnic_110100 NIC Link is Down  
 2018-07-05T21:02:41.727Z cpu28:66315)<6>igb: vmnic_110100 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX  
 ```
+ESXi6.7 からちょっと変わって「:link」で検索。 down か status changed か。あと vmnicX になった。
+```bat
+vmkernel.0(3605): 2019-02-27T13:47:08.800Z cpu12:2097810)ntg3:vmnic3:Ntg3PhyStateGet:404:link down
+vmkernel.0(3631): 2019-02-27T13:52:42.861Z cpu13:2097810)ntg3:vmnic3:Ntg3PhyStateGet:437:link state changed (auxSTS: 0xff3f)
+```
 
 ## VM のステータス変化
 hostd.log を「State Transition (」で検索する。
