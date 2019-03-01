@@ -5,7 +5,7 @@
  - Recovery Operation at Activation Failure DetectionRetry Count: 1
   - Failover Threshold: 0
   - Final Action: Stop the cluster service and reboot OS
-  - start.sh: 添付
+  - start.sh: Refer [exec_checkNP_stat.sh](https://github.com/Igaigasuru/EXPRESSCLUSTER/blob/master/tool/exec_checkNP_stat.sh)
   - Tuning button
     -> Start Script Tierout: 90
     -> Maintenance tab -> Logoutput Path: /opt/nec/clusterpro/log/exec_checkNP.log
