@@ -12,6 +12,11 @@ clpstat | grep failover | awk -F: '{print $1}' | sed "s/ //g"
 " " (半角スペース) を "" (なにもなし) に置換＝スペース一括削除
 
 ```bat
+clpstat | sed -n 1p
+```
+1 行目だけ表示。  
+
+```bat
 clpstat | sed -n '2,5p'
 ```
 2 行目から 5 行目まで抽出して表示。  
